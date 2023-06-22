@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Trouve le mot</title>
+</head>
+<body>
+    <div class="content">
+        <h1 class="text-3xl font-bold underline">
+            Jeu du pendu 
+        </h1>
+        <button id="generate" class="bd-gray-200 relative inline-block flex-shrink-0 h-6 w-11 border-transparent rounded">
+            click
+        </button>
+        <div class="container">
+            <p id="result"></p>
+        </div>
+    </div>
+    <script>
+    
+     let words = ["jennie", "Lalalisa", "jisoo", "rose", "blackpink", "maeliss","seynie"];
+        let used_words = [];
+    
+        let get_random_word = () => {
+            // console.log(words, 'vs', used_words)
+            if (words.length == 0) {
+                words = [...used_words]
+                used_words.splice(0)
+            }
+            let random_index = Math.trunc(Math.random() * words.length)
+            let word = words[random_index]
+            used_words.push(word)
+            words.splice(random_index, 1)
+            return word
+    
+        }
+    
+        function select_a_word() {
+            document.body.removeEventListener('keyup', search_if_letter_is_in_word)
+            document.body.addEventListener('keyup', search_if_letter_is_in_word);
+
+            let w = get_random_word();
+    
+              let resultContainer = document.querySelector("#result");
+        
+             //Supprimer les anciens éléments <span>
+            while (resultContainer.firstChild) {
+            resultContainer.firstChild.remove();
+        }
+            
+            for(let letter of w){
+                let span = document.createElement('span');
+                // span.innerText = letter
+                span.classList.add('carre')
+                span.setAttribute('data-letter', letter.toLowerCase());
+                document.querySelector("#result").appendChild(span)
+            }
+            //document.querySelector("#result").innerText = word
+        }
+    
+        function display_nberrors(){
+            document.querySelector('#nb_errors').innerText = nb_errors;
+            let innerText= [];
+
+        }
+        document.querySelector('#generate').addEventListener('click', select_a_word)
+
+
+        let nb_letters_found = 0;
+        let letters_already_pressed = [];
+        let nb_errors = 0;
+    
+    const search_if_letter_is_in_word = (event) => {
+        let letter_pressed = event.key.toLowerCase();
+
+        let cells = document.querySelectorAll('.carre');
+
+        // Je vérifie que ce n'est pas une lettre déjà recherchée au préalable.
+        if (!letters_already_pressed.includes(letter_pressed)) {
+
+            let found = false;
+            for (let cell of cells) {
+                if (cell.getAttribute('data-letter') == letter_pressed) {
+                    cell.innerHTML = letter_pressed
+                    found = true
+                    nb_letters_found++;
+                }
+            }
+            if (!found) {
+                nb_errors++
+            }
+            letters_already_pressed.push(letter_pressed)
+        }
+
+        console.log(nb_letters_found, "VS", cells.length)
+        if (nb_letters_found == cells.length) {
+            console.warn("Vous avez gagné !!!")
+        }
+
+        display_nberrors()
+    }
+    
+    </script>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+body{
+    /* color: rgb(124, 124, 124); */
+    background-image: url(asset/MONEYlalalisa.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.carre{
+    background-color: rgb(250, 213, 255);
+    color: blueviolet;
+    padding: 1em;
+    margin: 1em;
+}
